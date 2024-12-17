@@ -101,7 +101,7 @@
         const racing_time = document.getElementById('racing_time');
         const observer = new MutationObserver(() => {
             if (racing_time.textContent === '00:00') {
-                if(errors != 0) {
+                if(errors == 0) {
                     AutoCompleteHack(speed)
                 } else {
                     AutoCompleteHackWERRORS(speed, errors)
