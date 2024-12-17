@@ -117,7 +117,7 @@
         aCBstart.textContent = 'Старт';
 
         aCform.appendChild(aCspeed);
-        aCform.appendChild(aCspeed)
+        aCform.appendChild(aCerrors)
         aCform.appendChild(aCBstart);
         if(document.getElementById('main-block')) {
             document.getElementById('main-block').appendChild(aCform);
