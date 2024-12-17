@@ -36,7 +36,7 @@
         };
     }
     function AutoCompleteHack(speed, errors) {
-
+        eReady = false
         if (errors != 0) {
             let i = 0
             let loop = setInterval(function(){
@@ -50,6 +50,8 @@
                 document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: "Backspace", bubbles: true }));
                 i++;
             }, 1)
+        } else {
+            eReady = true
         }
 
         function getVisibleTextFromElement(element) {
@@ -86,15 +88,17 @@
         document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Старт" }));
         document.getElementById('main-block').appendChild(document.createElement('br'))
         let loop = setInterval(function(){
-            if(goida > pidoraz.length) {
-                console.log("[Klavohack] AutoComplete Stop!")
-                document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Финиш" }));
-                clearInterval(loop)
-                return
+            if(eReady) {
+                if(goida > pidoraz.length) {
+                    console.log("[Klavohack] AutoComplete Stop!")
+                    document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Финиш" }));
+                    clearInterval(loop)
+                    return
+                }
+                document.getElementById("inputtext").value = document.getElementById("inputtext").value + pidoraz[goida]
+                document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: pidoraz[goida], bubbles: true }));
+                goida++;
             }
-            document.getElementById("inputtext").value = document.getElementById("inputtext").value + pidoraz[goida]
-            document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: pidoraz[goida], bubbles: true }));
-            goida++;
         }, 1000/(speed/60))
     }
     function autoStart(speed, errors) {
