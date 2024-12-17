@@ -38,12 +38,18 @@
     function AutoCompleteHack(speed, errors) {
 
         if (errors != 0) {
-            for(let i = 0; i <= errors; i++) {
-                document.getElementById("inputtext").value = document.getElementById("inputtext").value + "."
+            let i = 0
+            let loop = setInterval(function(){
+                if(i==errors) {
+                    clearInterval(loop)
+                    return
+                }
+                document.getElementById("inputtext").value = document.getElementById("inputtext").value + ".";
                 document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: ".", bubbles: true }));
-                document.getElementById("inputtext").value = ""
+                document.getElementById("inputtext").value = "";
                 document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: "Backspace", bubbles: true }));
-            }
+                i++;
+            }, 1)
         }
 
         function getVisibleTextFromElement(element) {
@@ -84,6 +90,7 @@
                 console.log("[Klavohack] AutoComplete Stop!")
                 document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Финиш" }));
                 clearInterval(loop)
+                return
             }
             document.getElementById("inputtext").value = document.getElementById("inputtext").value + pidoraz[goida]
             document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: pidoraz[goida], bubbles: true }));
