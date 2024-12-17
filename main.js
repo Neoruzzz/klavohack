@@ -41,6 +41,7 @@
             for(let i = 0; i <= errors; i++) {
                 document.getElementById("inputtext").value = document.getElementById("inputtext").value + "."
                 document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: ".", bubbles: true }));
+                document.getElementById("inputtext").value = ""
             }
         }
 
