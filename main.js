@@ -35,7 +35,13 @@
             originalAddEventListener.call(this, type, wrappedListener, options);
         };
     }
-    function AutoCompleteHack(speed) {
+    function AutoCompleteHack(speed, errors) {
+
+        if (errors != 0) {
+            document.getElementById("inputtext").value = document.getElementById("inputtext").value + "."
+            document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: ".", bubbles: true }));
+        }
+
         function getVisibleTextFromElement(element) {
             let visibleText = '';
 
@@ -80,13 +86,13 @@
             goida++;
         }, 1000/(speed/60))
     }
-    function autoStart(speed) {
+    function autoStart(speed, errors) {
         document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Ожидание" }));
         document.getElementById('main-block').appendChild(document.createElement('br'))
         const racing_time = document.getElementById('racing_time');
         const observer = new MutationObserver(() => {
             if (racing_time.textContent === '00:00') {
-                AutoCompleteHack(speed)
+                AutoCompleteHack(speed, errors)
                 observer.disconnect();
             }
         });
@@ -97,20 +103,27 @@
     document.addEventListener('DOMContentLoaded', function(event){
         let aCform = document.createElement('form');
         let aCspeed = document.createElement('input');
+        let aCerrors = document.createElement('input');
         let aCBstart = document.createElement('button');
         aCspeed.type = 'text';
         aCspeed.name = 'speed';
         aCspeed.placeholder = 'Скорость Зн/м';
+        aCerrors.type = 'number';
+        aCerrors.name = 'errors'
+        aCerrors.min = '0';
+        aCerrors.step = '1';
+        aCerrors.title = 'Число ошибок'
         aCBstart.type = 'submit';
         aCBstart.textContent = 'Старт';
 
         aCform.appendChild(aCspeed);
+        aCform.appendChild(aCspeed)
         aCform.appendChild(aCBstart);
         if(document.getElementById('main-block')) {
             document.getElementById('main-block').appendChild(aCform);
             originalAddEventListener.call(aCform, 'submit', function(event) {
                 event.preventDefault()
-                autoStart(parseInt(aCspeed.value))
+                autoStart(parseInt(aCspeed.value), aCerrors.valueAsNumber)
             });
         }
     })
