@@ -35,26 +35,7 @@
             originalAddEventListener.call(this, type, wrappedListener, options);
         };
     }
-    function AutoCompleteHack(speed, errors) {
-        eReady = false
-        if (errors != 0) {
-            let i = 0
-            let loop = setInterval(function(){
-                if(i==errors) {
-                    eReady = true
-                    clearInterval(loop)
-                    return
-                }
-                document.getElementById("inputtext").value = document.getElementById("inputtext").value + ".";
-                document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: ".", bubbles: true }));
-                document.getElementById("inputtext").value = "";
-                document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: "Backspace", bubbles: true }));
-                i++;
-            }, 1)
-        } else {
-            eReady = true
-        }
-
+    function AutoCompleteHack(speed) {
         function getVisibleTextFromElement(element) {
             let visibleText = '';
 
@@ -89,18 +70,30 @@
         document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Старт" }));
         document.getElementById('main-block').appendChild(document.createElement('br'))
         let loop = setInterval(function(){
-            if(eReady) {
-                if(goida > pidoraz.length) {
-                    console.log("[Klavohack] AutoComplete Stop!")
-                    document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Финиш" }));
-                    clearInterval(loop)
-                    return
-                }
-                document.getElementById("inputtext").value = document.getElementById("inputtext").value + pidoraz[goida]
-                document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: pidoraz[goida], bubbles: true }));
-                goida++;
+            if(goida > pidoraz.length) {
+                console.log("[Klavohack] AutoComplete Stop!")
+                document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Финиш" }));
+                clearInterval(loop)
             }
+            document.getElementById("inputtext").value = document.getElementById("inputtext").value + pidoraz[goida]
+            document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: pidoraz[goida], bubbles: true }));
+            goida++;
         }, 1000/(speed/60))
+    }
+    function AutoCompleteHackWERRORS(speed, errors) {
+        let i = 0
+            let loop = setInterval(function(){
+                if(i < errors) {
+                    document.getElementById("inputtext").value = document.getElementById("inputtext").value + ".";
+                    document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: ".", bubbles: true }));
+                    document.getElementById("inputtext").value = "";
+                    document.getElementById("inputtext").dispatchEvent(new KeyboardEvent("keyup", { key: "Backspace", bubbles: true }));
+                    i++;
+                } else {
+                    AutoCompleteHack(speed)
+                    clearInterval(loop)
+                }
+            }, 1)
     }
     function autoStart(speed, errors) {
         document.getElementById('main-block').appendChild(Object.assign(document.createElement('span'), { textContent: "[KlavoHack] Ожидание" }));
@@ -108,7 +101,11 @@
         const racing_time = document.getElementById('racing_time');
         const observer = new MutationObserver(() => {
             if (racing_time.textContent === '00:00') {
-                AutoCompleteHack(speed, errors)
+                if(errors != 0) {
+                    AutoCompleteHack(speed)
+                } else {
+                    AutoCompleteHackWERRORS(speed, errors)
+                }
                 observer.disconnect();
             }
         });
