@@ -41,6 +41,7 @@
             let i = 0
             let loop = setInterval(function(){
                 if(i==errors) {
+                    eReady = true
                     clearInterval(loop)
                     return
                 }
