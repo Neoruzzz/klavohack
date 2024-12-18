@@ -106,7 +106,7 @@
         aCerrors.name = 'errors'
         aCerrors.min = '0';
         aCerrors.step = '1';
-        aCerrors.placeholder = ''
+        aCerrors.placeholder = 'Кол-во ошибок'
         aCBstart.type = 'submit';
         aCBstart.textContent = 'Старт';
 
